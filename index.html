@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Moments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--bg:#F6F1EB;--surface:#FFFFFF;--ink:#1B1416;--muted:#6A5A5F;--line:#E4D9D0;--accent:#B23A55;--accent-ink:#fff;--soft:#F1E3E3;--shadow:0 20px 50px rgba(27,20,22,.12)}
+@media(prefers-color-scheme:dark){:root{--bg:#0F0C0D;--surface:#1A1415;--ink:#F5EDE8;--muted:#B4A3A8;--line:#2E2427;--accent:#F0708A;--accent-ink:#1B0F13;--soft:#2A1A1F;--shadow:0 20px 50px rgba(0,0,0,.5)}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+h1,h2,.serif{font-family:Fraunces,Georgia,serif;font-weight:400;margin:0;letter-spacing:-.02em}
+em{font-style:italic;color:var(--accent)}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+.btn{min-height:46px;padding:12px 26px;border-radius:999px;border:1.5px solid transparent;font-weight:600;font-size:15px;cursor:pointer;transition:transform .2s,background .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 35%,transparent)}
+.btn-ghost{border-color:var(--ink);background:transparent}
+.btn-ghost:hover{background:var(--ink);color:var(--bg)}
+.bar{position:sticky;top:0;z-index:20;backdrop-filter:blur(16px) saturate(1.4);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{font-size:26px;display:flex;align-items:center;gap:10px}
+.logo svg{color:var(--accent)}
+nav{display:flex;gap:36px;font-size:15px;font-weight:500;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;padding:72px 0 56px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--soft);padding:8px 16px;border-radius:999px}
+.hero h1{font-size:clamp(52px,7.4vw,104px);line-height:.96;margin:26px 0 22px}
+.hero p{font-size:19px;color:var(--muted);max-width:480px;margin:0 0 32px}
+.acts{display:flex;gap:14px;flex-wrap:wrap}
+.stats{display:flex;gap:40px;margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.stats b{display:block;font-family:Fraunces,serif;font-size:40px;font-weight:400;line-height:1}
+.stats span{font-size:13px;color:var(--muted)}
+.collage{position:relative;height:540px}
+.card{position:absolute;border-radius:22px;border:8px solid var(--surface);background:var(--soft) center/cover no-repeat;box-shadow:var(--shadow);display:grid;place-items:center;color:var(--accent);transition:transform .5s}
+.card.a{width:58%;height:66%;left:0;top:6%;transform:rotate(-5deg)}
+.card.b{width:50%;height:56%;right:0;top:0;transform:rotate(4deg)}
+.card.c{width:54%;height:46%;right:6%;bottom:0;transform:rotate(-2deg)}
+.collage:hover .a{transform:rotate(-7deg) translateY(-6px)}.collage:hover .b{transform:rotate(6deg) translateY(-6px)}.collage:hover .c{transform:rotate(0) translateY(6px)}
+.badge{position:absolute;z-index:3;left:38%;bottom:6%;background:var(--accent);color:var(--accent-ink);width:96px;height:96px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:12px;font-weight:600;line-height:1.2;box-shadow:var(--shadow)}
+.upload{background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:48px;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center;box-shadow:var(--shadow)}
+.upload h2{font-size:46px;line-height:1.05}.upload p{color:var(--muted);margin:14px 0 0}
+.drop{border:2px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:24px;padding:36px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;background:var(--bg);transition:.25s}
+.drop.over{border-color:var(--accent);background:var(--soft);transform:scale(1.015)}
+.drop svg{color:var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+select{min-height:46px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.sec{padding:96px 0 0}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.head h2{font-size:clamp(38px,5vw,60px);line-height:1}
+.head small{font-family:Inter;font-size:16px;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:44px;padding:10px 20px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{column-count:4;column-gap:16px}
+.tile{break-inside:avoid;margin:0 0 16px;border-radius:20px;overflow:hidden;position:relative;background:var(--line);animation:up .6s both}
+.tile .open{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in}
+.tile img{display:block;width:100%;height:auto;transition:transform .6s}
+.tile:hover img{transform:scale(1.05)}
+.tile::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:linear-gradient(transparent,rgba(0,0,0,.6));opacity:0;transition:.3s;pointer-events:none}
+.tile:hover::after,.tile:focus-within::after{opacity:1}
+.tile .tag{position:absolute;left:14px;bottom:12px;z-index:2;color:#fff;font-size:13px;font-weight:500;opacity:0;transform:translateY(6px);transition:.3s}
+.tile:hover .tag,.tile:focus-within .tag{opacity:1;transform:none}
+.heart{position:absolute;top:10px;right:10px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#1B1416;display:grid;place-items:center;cursor:pointer;transition:transform .2s}
+.heart:hover{transform:scale(1.1)}
+.heart[aria-pressed=true]{color:#D6294F}.heart[aria-pressed=true] svg{fill:currentColor}
+.empty{padding:72px 24px;text-align:center;border:2px dashed var(--line);border-radius:28px;color:var(--muted)}
+.empty b{display:block;font-family:Fraunces,serif;font-weight:400;font-size:28px;color:var(--ink);margin-bottom:6px}
+.albums{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.album{position:relative;aspect-ratio:3/4;border-radius:24px;overflow:hidden;border:0;padding:0;cursor:pointer;background:var(--soft) center/cover;text-align:left;transition:transform .3s,box-shadow .3s}
+.album:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.album .lbl{position:absolute;inset:auto 0 0;padding:44px 20px 18px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.album .serif{font-size:28px;display:block}.album small{opacity:.85}
+footer{margin-top:96px;border-top:1px solid var(--line);padding:32px 0 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:var(--muted);font-size:14px}
+dialog{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;width:100%;height:100%}
+dialog::backdrop{background:rgba(10,7,8,.94);backdrop-filter:blur(8px)}
+.lb{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;position:relative}
+.lb img{max-width:92vw;max-height:76vh;border-radius:16px;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.lb-cap{color:#E8DAD3;font-size:14px}
+.lb-bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.lb .btn{background:#fff;color:#1B1416;border:0}.lb .danger{background:#C62828;color:#fff}
+.nb{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.95);color:#1B1416;font-size:22px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:13px 24px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:.35s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.gate-card{background:var(--surface);color:var(--ink);padding:40px;border-radius:28px;width:min(420px,92vw);display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+.gate-card h2{font-size:38px;line-height:1.05}.gate-card p{margin:0 0 6px;color:var(--muted)}
+.gate-card input{min-height:48px;padding:0 18px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.err{color:#D6294F;font-size:14px;min-height:20px}
+.bar .r{display:flex;gap:10px;align-items:center}
+.banner{background:var(--soft);color:var(--ink);text-align:center;font-size:14px;padding:10px 20px;border-bottom:1px solid var(--line)}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:1000px){.hero{grid-template-columns:1fr;gap:40px}.collage{height:440px}.upload{grid-template-columns:1fr;padding:32px}.grid{column-count:3}.albums{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.wrap{padding:0 18px}nav{display:none}.hero{padding:40px 0}.stats{gap:24px}.stats b{font-size:32px}.collage{height:360px}.grid{column-count:2;column-gap:10px}.tile{margin-bottom:10px;border-radius:14px}.upload h2{font-size:34px}.sec{padding-top:64px}.badge{width:80px;height:80px;font-size:11px}.nb{width:44px;height:44px}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+<a href="#top" class="logo serif"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 5 6 5c2 0 3.3 1 4 2.2h4C14.7 6 16 5 18 5c3.4 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg><span id="siteTitle"></span></a>
+<nav><a href="#gallery">Gallery</a><a href="#albums">Albums</a><a href="#upload">Upload</a></nav>
+<div class="r"><a class="btn btn-primary" href="#upload">Upload photos</a><button class="btn btn-ghost" id="signout">Sign out</button></div>
+</div></div>
+
+<div class="banner" id="banner" hidden>Local mode: ang mga picture ay nase-save lang sa device/browser na ito. Ilagay ang Supabase keys sa CONFIG para makita rin ni Czarise.</div>
+<main class="wrap" id="top">
+<section class="hero">
+<div>
+<span class="eyebrow" id="names"></span>
+<h1>Our story,<br><em>in pictures.</em></h1>
+<p>A private place for our favorite memories. Upload, organize into albums, and relive them anytime.</p>
+<div class="acts"><a class="btn btn-primary" href="#upload">Add memories</a><a class="btn btn-ghost" href="#gallery">View gallery</a></div>
+<div class="stats">
+<div><b id="sDays">0</b><span>days together</span></div>
+<div><b id="sPhotos">0</b><span>photos</span></div>
+<div><b id="sFavs">0</b><span>favorites</span></div>
+</div>
+</div>
+<div class="collage" aria-hidden="true">
+<div class="card a"></div><div class="card b"></div><div class="card c"></div>
+<div class="badge">Made<br>with<br>love</div>
+</div>
+</section>
+
+<section class="upload" id="upload">
+<div><h2>Add new <em>memories</em></h2><p>Drag and drop, or choose files from your device. Pick an album, we handle the rest.</p></div>
+<div class="drop" id="drop">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+<strong>Drop photos here</strong>
+<div class="row">
+<label for="albumSel" style="position:absolute;left:-9999px">Album</label>
+<select id="albumSel"></select>
+<button class="btn btn-primary" id="pick">Choose files</button>
+</div>
+<input type="file" id="file" accept="image/*" multiple hidden>
+</div>
+</section>
+
+<section class="sec" id="gallery">
+<div class="head"><h2>The <em>gallery</em> <small id="count"></small></h2><div class="chips" id="chips"></div></div>
+<div id="grid" class="grid"></div>
+<div id="empty" class="empty" hidden><b>Nothing here yet</b>Upload your first photo to start the story.</div>
+</section>
+
+<section class="sec" id="albums">
+<div class="head"><h2>Our <em>albums</em></h2></div>
+<div class="albums" id="albumGrid"></div>
+</section>
+
+<footer><span id="made"></span><span id="copy"></span></footer>
+</main>
+
+<dialog id="lb"><div class="lb">
+<button class="nb" id="prev" style="left:16px" aria-label="Previous photo">&#8592;</button>
+<button class="nb" id="next" style="right:16px" aria-label="Next photo">&#8594;</button>
+<img id="lbImg" alt="">
+<div class="lb-cap" id="lbCap"></div>
+<div class="lb-bar">
+<button class="btn" id="lbFav">Favorite</button>
+<button class="btn" id="dl">Download</button>
+<button class="btn danger" id="del">Delete</button>
+<button class="btn" id="close">Close</button>
+</div>
+</div></dialog>
+<dialog id="gate"><div class="lb"><form class="gate-card" id="loginForm">
+<h2>Welcome, <em>love</em></h2><p>Sign in to see our moments.</p>
+<label for="email" style="position:absolute;left:-9999px">Email</label><input id="email" type="email" placeholder="Email" required autocomplete="email">
+<label for="pw" style="position:absolute;left:-9999px">Password</label><input id="pw" type="password" placeholder="Password" required autocomplete="current-password">
+<div class="err" id="loginErr" role="alert"></div>
+<button class="btn btn-primary" type="submit" style="justify-content:center">Sign in</button>
+</form></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+// ====== EDIT THESE ======
+const CONFIG = {
+  siteTitle: "Our Moments",
+  names: "Franco & Czarise",
+  anniversary: "2024-06-24",   // Franco & Czarise anniversary (YYYY-MM-DD)
+  albums: ["Dates", "Travels", "Celebrations", "Everyday"],
+  supabaseUrl: "PASTE_SUPABASE_URL_HERE",
+  supabaseKey: "PASTE_SUPABASE_ANON_KEY_HERE"
+};
+// ========================
+const $ = s => document.querySelector(s);
+let photos = [], filter = "All", cur = -1;
+const urls = new Map();
+const HEART = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 2.6 5 6 5c2 0 3.3 1 4 2.2h4C14.7 6 16 5 18 5c3.4 0 5.1 3.4 3.6 6.8C19.5 16.4 12 21 12 21z"/></svg>';
+
+document.title = CONFIG.siteTitle;
+$("#siteTitle").textContent = CONFIG.siteTitle;
+$("#names").textContent = CONFIG.names;
+$("#made").textContent = "Made with love by " + CONFIG.names;
+$("#copy").textContent = "© " + new Date().getFullYear() + " " + CONFIG.siteTitle;
+$("#albumSel").innerHTML = CONFIG.albums.map(a => `<option>${a}</option>`).join("");
+const days = Math.floor((Date.now() - new Date(CONFIG.anniversary)) / 864e5);
+$("#sDays").textContent = isNaN(days) || days < 0 ? "—" : days.toLocaleString();
+
+// Storage: cloud (Supabase) when configured, otherwise this browser only
+let CLOUD = !/PASTE_/.test(CONFIG.supabaseUrl + CONFIG.supabaseKey) && !!window.supabase;
+let sb = null, uid = null;
+if (CLOUD) { try { sb = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey); } catch (e) { CLOUD = false; } }
+const url = p => p.url;
+
+// local mode (IndexedDB)
+const dbp = new Promise((res, rej) => {
+  const r = indexedDB.open("our-moments", 1);
+  r.onupgradeneeded = () => r.result.createObjectStore("photos", { keyPath: "id" });
+  r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+});
+const tx = async (mode, fn) => {
+  const db = await dbp;
+  return new Promise((res, rej) => {
+    const t = db.transaction("photos", mode), q = fn(t.objectStore("photos"));
+    t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error);
+  });
+};
+
+async function loadAll() {
+  if (!CLOUD) {
+    const all = (await tx("readonly", s => s.getAll())) || [];
+    photos = all.sort((a, b) => b.date - a.date).map(p => ({ ...p, url: p.url || (p.url = URL.createObjectURL(p.blob)) }));
+    return;
+  }
+  const { data, error } = await sb.from("photos").select("*").order("created_at", { ascending: false });
+  if (error) throw error;
+  const rows = data || [], map = {};
+  if (rows.length) {
+    const { data: sg } = await sb.storage.from("photos").createSignedUrls(rows.map(r => r.path), 3600);
+    (sg || []).forEach(x => { map[x.path] = x.signedUrl; });
+  }
+  photos = rows.filter(r => map[r.path]).map(r => ({ id: r.id, path: r.path, album: r.album, fav: r.fav, name: r.name, date: new Date(r.created_at).getTime(), url: map[r.path] }));
+}
+async function addPhoto(blob, album, name) {
+  if (!CLOUD) { await tx("readwrite", s => s.put({ id: crypto.randomUUID(), blob, album, name, date: Date.now(), fav: false })); return null; }
+  const path = `${uid}/${crypto.randomUUID()}.jpg`;
+  const up = await sb.storage.from("photos").upload(path, blob, { contentType: blob.type || "image/jpeg" });
+  if (up.error) return "Upload failed: " + up.error.message;
+  const ins = await sb.from("photos").insert({ path, album, name });
+  return ins.error ? "Save failed: " + ins.error.message : null;
+}
+async function saveFav(p) {
+  if (!CLOUD) { const { url: _u, ...rest } = p; await tx("readwrite", s => s.put(rest)); return null; }
+  const r = await sb.from("photos").update({ fav: p.fav }).eq("id", p.id); return r.error;
+}
+async function removePhoto(p) {
+  if (!CLOUD) { await tx("readwrite", s => s.delete(p.id)); return; }
+  await sb.storage.from("photos").remove([p.path]); await sb.from("photos").delete().eq("id", p.id);
+}
+const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2400); };
+const visible = () => photos.filter(p => filter === "All" ? true : filter === "Favorites" ? p.fav : p.album === filter);
+
+function render() {
+  $("#chips").innerHTML = ["All", "Favorites", ...CONFIG.albums].map(a => `<button class="chip" aria-pressed="${a === filter}" data-f="${a}">${a}</button>`).join("");
+  const v = visible();
+  $("#grid").innerHTML = v.map((p, i) => `<figure class="tile" style="animation-delay:${Math.min(i, 12) * 40}ms">
+<button class="open" data-i="${i}" aria-label="Open ${p.album} photo"><img loading="lazy" src="${url(p)}" alt="${p.album} photo"></button>
+<button class="heart" data-id="${p.id}" aria-pressed="${!!p.fav}" aria-label="Favorite">${HEART}</button>
+<figcaption class="tag">${p.album}</figcaption></figure>`).join("");
+  $("#empty").hidden = v.length > 0;
+  $("#count").textContent = photos.length ? `${v.length} photo${v.length === 1 ? "" : "s"}` : "";
+  $("#sPhotos").textContent = photos.length;
+  $("#sFavs").textContent = photos.filter(p => p.fav).length;
+  $("#albumGrid").innerHTML = CONFIG.albums.map(a => {
+    const l = photos.filter(p => p.album === a);
+    return `<button class="album" data-a="${a}" ${l[0] ? `style="background-image:url('${url(l[0])}')"` : ""}><span class="lbl"><span class="serif">${a}</span><small>${l.length} photo${l.length === 1 ? "" : "s"}</small></span></button>`;
+  }).join("");
+  const cards = [...document.querySelectorAll(".card")];
+  cards.forEach((c, i) => {
+    const p = photos[i];
+    c.style.backgroundImage = p ? `url('${url(p)}')` : "none";
+    c.innerHTML = p ? "" : HEART.replace('width="20" height="20"', 'width="40" height="40"');
+  });
+}
+
+async function shrink(file) {
+  try {
+    const b = await createImageBitmap(file), k = Math.min(1, 1800 / Math.max(b.width, b.height));
+    const c = document.createElement("canvas"); c.width = Math.round(b.width * k); c.height = Math.round(b.height * k);
+    c.getContext("2d").drawImage(b, 0, 0, c.width, c.height);
+    return await new Promise(r => c.toBlob(x => r(x || file), "image/jpeg", .86));
+  } catch { return file; }
+}
+async function addFiles(files) {
+  const imgs = [...files].filter(f => f.type.startsWith("image/"));
+  if (!imgs.length) return toast("Please choose image files.");
+  const album = $("#albumSel").value; toast("Uploading…");
+  let ok = 0;
+  for (const f of imgs) {
+    const blob = await shrink(f);
+    const err = await addPhoto(blob, album, f.name);
+    if (err) { toast(err); continue; }
+    ok++;
+  }
+  await loadAll(); render();
+  if (ok) { toast(`${ok} photo${ok > 1 ? "s" : ""} added to ${album}`); location.hash = "#gallery"; }
+}
+
+$("#pick").onclick = () => $("#file").click();
+$("#file").onchange = e => { addFiles(e.target.files); e.target.value = ""; };
+const drop = $("#drop");
+["dragenter", "dragover"].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(n => drop.addEventListener(n, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+$("#chips").onclick = e => { const b = e.target.closest("[data-f]"); if (b) { filter = b.dataset.f; render(); } };
+$("#albumGrid").onclick = e => { const b = e.target.closest("[data-a]"); if (b) { filter = b.dataset.a; render(); location.hash = "#gallery"; } };
+async function toggleFav(id) {
+  const p = photos.find(x => x.id === id); if (!p) return;
+  p.fav = !p.fav; render();
+  const err = await saveFav(p);
+  if (err) { p.fav = !p.fav; render(); toast("Could not update favorite."); }
+}
+$("#grid").onclick = e => {
+  const h = e.target.closest(".heart"); if (h) return toggleFav(h.dataset.id);
+  const t = e.target.closest("[data-i]"); if (t) openLb(+t.dataset.i);
+};
+
+const lb = $("#lb");
+function openLb(i) {
+  const v = visible(); if (!v.length) return;
+  cur = (i + v.length) % v.length; const p = v[cur];
+  $("#lbImg").src = url(p);
+  $("#lbImg").alt = p.album + " photo";
+  $("#lbCap").textContent = `${p.album} · ${new Date(p.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}`;
+  $("#lbFav").textContent = p.fav ? "♥ Favorited" : "♡ Favorite";
+  if (!lb.open) lb.showModal();
+}
+$("#prev").onclick = () => openLb(cur - 1);
+$("#next").onclick = () => openLb(cur + 1);
+$("#close").onclick = () => lb.close();
+lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
+document.addEventListener("keydown", e => { if (!lb.open) return; if (e.key === "ArrowLeft") openLb(cur - 1); if (e.key === "ArrowRight") openLb(cur + 1); });
+$("#lbFav").onclick = async () => { const p = visible()[cur]; await toggleFav(p.id); openLb(Math.min(cur, visible().length - 1)); };
+$("#dl").onclick = async () => {
+  const p = visible()[cur];
+  try { const b = await (await fetch(p.url)).blob(), a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = p.name || "photo.jpg"; a.click(); }
+  catch { window.open(p.url, "_blank"); }
+};
+$("#del").onclick = async () => {
+  const p = visible()[cur]; if (!confirm("Delete this photo?")) return;
+  await removePhoto(p); lb.close(); await loadAll(); render(); toast("Photo deleted");
+};
+
+// Start
+const gate = $("#gate");
+gate.addEventListener("cancel", e => e.preventDefault());
+async function start(session) {
+  if (session) { uid = session.user.id; if (gate.open) gate.close(); }
+  try { await loadAll(); } catch (e) { toast("Could not load photos. Check setup."); }
+  render();
+}
+if (CLOUD) {
+  sb.auth.getSession().then(({ data }) => { render(); if (data.session) start(data.session); else gate.showModal(); });
+  $("#loginForm").onsubmit = async e => {
+    e.preventDefault(); $("#loginErr").textContent = "";
+    const { data, error } = await sb.auth.signInWithPassword({ email: $("#email").value, password: $("#pw").value });
+    if (error) { $("#loginErr").textContent = "Wrong email or password."; return; }
+    start(data.session);
+  };
+  $("#signout").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+} else {
+  $("#signout").hidden = true; $("#banner").hidden = false;
+  start(null);
+}
+</script>
+</body>
+</html>
